@@ -9,7 +9,7 @@ const OUTPUT_HEIGHT_PX = 48;
 
 const pool = workerpool.pool(
   './scripts/fontPreviewWorker.js',
-  { minWorkers: os.availableParallelism() }
+  { minWorkers: "max", maxWorkers: os.availableParallelism() }
 );
 
 async function computeDiffWithCached(apiResult) {
