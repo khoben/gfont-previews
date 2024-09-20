@@ -1,0 +1,44 @@
+name: Update Google Fonts Previews
+
+on:
+  push:
+  schedule:
+    - cron: "3 3 * * 0"
+
+jobs:
+  generate-previews:
+    runs-on: ubuntu-latest
+    container: 
+      image: ghcr.io/puppeteer/puppeteer:23.4.0
+      options: --user 1001
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Run update previews script
+        run: npm start
+        env:
+          GFONT_API_KEY: ${{ secrets.GFONT_API_KEY }}
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: '[AUTOMATED] Update Google Fonts Previews'
+          file_pattern: 'output/**'

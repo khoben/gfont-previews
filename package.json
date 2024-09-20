@@ -1,0 +1,31 @@
+{
+  "name": "gfont-previews",
+  "description": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/khoben/gfont-previews/issues"
+  },
+  "homepage": "https://github.com/khoben/gfont-previews",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "scripts/index.js",
+  "files": [
+    "output"
+  ],
+  "keywords": [
+    "font",
+    "google",
+    "google fonts",
+    "font preview",
+    "generator"
+  ],
+  "scripts": {
+    "start": "node scripts/index.js"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "puppeteer": "^23.4.0",
+    "sharp": "^0.32.6",
+    "workerpool": "^9.1.3"
+  }
+}
