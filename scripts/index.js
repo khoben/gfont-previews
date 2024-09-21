@@ -26,7 +26,7 @@ async function computeDiffWithCached(apiResult) {
       )
     );
 
-    console.log(`Diff font families: ${diffItems.length}`);
+    console.log(`Found ${diffItems.length} fonts to be updated`);
 
     apiResult.items = diffItems;
   } else {
@@ -41,7 +41,11 @@ async function run() {
     .then(raw => raw.json())
     .catch(err => console.error(err));
 
-  if (!apiResult || "error" in apiResult) {
+  if (!apiResult) {
+    return Promise.reject("No api result");
+  }
+
+  if ("error" in apiResult) {
     return Promise.reject(apiResult.error.message);
   }
 
@@ -71,10 +75,12 @@ async function run() {
   return Promise.all(promises)
 }
 
+// Create output folder if not exists
 if (!fs.existsSync(OUTPUT_FOLDER_PATH)) {
   fs.mkdirSync(OUTPUT_FOLDER_PATH, { recursive: true });
 }
 
+// Run generate font previews
 run().then((results) => {
   console.log(`Done! Updated ${results.length} fonts`);
 }).catch((err) => {

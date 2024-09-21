@@ -34,8 +34,8 @@ const generateHTMLPreview = (family, size, style) => {
 
             .preview {
                 font-family: "${family}";
-                font-size: ${size};
-                margin: 8px;
+                font-size: ${size}px;
+                margin: 10px;
             }
         </style>
     </head>
@@ -50,8 +50,11 @@ const browser = await createBrowser();
 const generatePreview = async (family, style, height, output) => {
   const page = await browser.newPage();
 
-  await page.setViewport({ width: 200, height: height * 2, deviceScaleFactor: 1 });
-  await page.goto(`data:text/html,${generateHTMLPreview(family, height, style)}`, { waitUntil: 'networkidle0' });
+  await page.setViewport({ width: height * 10, height: height * 2, deviceScaleFactor: 1 });
+
+  await page.goto(`data:text/html,${generateHTMLPreview(family, height, style)}`, { waitUntil: "load" });
+  // Wait for fonts to load
+  await page.evaluateHandle('document.fonts.ready');
 
   const previewItemScreenshot = await page.screenshot({ omitBackground: true, fullPage: true });
 
@@ -60,7 +63,7 @@ const generatePreview = async (family, style, height, output) => {
   const previewOutputPath = `${output}/${family}-${style}.png`;
 
   const trimmedPreview = sharp(previewItemScreenshot)
-    .trim({ lineArt: true })
+    .trim({ lineArt: true, threshold: 5 })
     .resize({ height: height, fit: "contain" })
     .png();
   await trimmedPreview.toFile(previewOutputPath);

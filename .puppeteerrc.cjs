@@ -5,6 +5,6 @@ const { join } = require('path');
  */
 module.exports = {
     // Changes the cache location for Puppeteer.
-    // Points to origin pptruser cache directory
+    // Points to origin pptruser (Docker) cache directory
     cacheDirectory: join('/home', 'pptruser', '.cache', 'puppeteer'),
 };
