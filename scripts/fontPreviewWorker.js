@@ -20,22 +20,12 @@ const generateHTMLPreview = (family, size, style) => {
     <head>
         <link rel="stylesheet" href="${fontCssHref}">
         <style>
-            html, body {
-              margin: 0;
-            }
-
-            body {
-                display: inherit;
-                height: 100vh;
-                align-items: center;
-                justify-content: center;
-                white-space: nowrap;
-            }
-
             .preview {
+                display: inline;
                 font-family: "${family}";
                 font-size: ${size}px;
-                margin: 10px;
+                padding: ${size}px;
+                white-space: nowrap;
             }
         </style>
     </head>
@@ -56,17 +46,16 @@ const generatePreview = async (family, style, height, output) => {
   // Wait for fonts to load
   await page.evaluateHandle('document.fonts.ready');
 
-  const previewItemScreenshot = await page.screenshot({ omitBackground: true, fullPage: true });
+  const previewItemScreenshot = await page.screenshot({ type: "png", omitBackground: true, fullPage: true });
 
   await page.close();
 
   const previewOutputPath = `${output}/${family}-${style}.png`;
 
-  const trimmedPreview = sharp(previewItemScreenshot)
+  await sharp(previewItemScreenshot)
     .trim({ lineArt: true, threshold: 5 })
     .resize({ height: height, fit: "contain" })
-    .png();
-  await trimmedPreview.toFile(previewOutputPath);
+    .toFile(previewOutputPath)
 
   console.log(`Generated preview: ${previewOutputPath}`);
 

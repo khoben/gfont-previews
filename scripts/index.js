@@ -26,7 +26,7 @@ async function computeDiffWithCached(apiResult) {
       )
     );
 
-    console.log(`Found ${diffItems.length} fonts to be updated`);
+    console.log(`Found ${diffItems.length} font families to be updated`);
 
     apiResult.items = diffItems;
   } else {
