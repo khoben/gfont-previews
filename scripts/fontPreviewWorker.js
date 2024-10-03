@@ -14,14 +14,14 @@ async function createBrowser() {
 }
 
 const generateHTMLPreview = (family, size, style) => {
-  const fontCssHref = `https://fonts.googleapis.com/css?family=${family.replace(/\s+/g, "+")}:${style}&text=${encodeURI(family)}`;
+  const fontCssHref = `https://fonts.googleapis.com/css?family=${family.replace(/\s+/g, "+")}:${style}&text=${encodeURIComponent(family)}`;
 
   return `<html>
     <head>
         <link rel="stylesheet" href="${fontCssHref}">
         <style>
             .preview {
-                display: inline;
+                display: inline-block;
                 font-family: "${family}";
                 font-size: ${size}px;
                 padding: ${size}px;
@@ -53,7 +53,7 @@ const generatePreview = async (family, style, height, output) => {
   const previewOutputPath = `${output}/${family}-${style}.png`;
 
   await sharp(previewItemScreenshot)
-    .trim({ lineArt: true, threshold: 5 })
+    .trim({ lineArt: true, threshold: 3 })
     .resize({ height: height, fit: "contain" })
     .toFile(previewOutputPath)
 

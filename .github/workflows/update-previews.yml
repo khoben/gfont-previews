@@ -2,6 +2,8 @@ name: Update Google Fonts Previews
 
 on:
   push:
+    branches:
+      - master
   schedule:
     - cron: "3 3 * * 0"
 
@@ -9,7 +11,7 @@ jobs:
   generate-previews:
     runs-on: ubuntu-latest
     container: 
-      image: ghcr.io/puppeteer/puppeteer:23.4.0
+      image: ghcr.io/puppeteer/puppeteer:23.5.0
       options: --user 1001
 
     permissions:
