@@ -26,6 +26,6 @@
     "fs-extra": "^11.2.0",
     "puppeteer": "^23.5.0",
     "sharp": "^0.33.5",
-    "workerpool": "^9.1.3"
+    "workerpool": "^9.2.0"
   }
 }
