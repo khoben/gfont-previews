@@ -4,6 +4,7 @@ import fs from "node:fs";
 
 const GFONT_API_KEY = process.env.GFONT_API_KEY;
 const CACHED_GFONT_PATH = "./output/google.json";
+const CACHED_METADATA_PATH = "./output/metadata.json";
 const OUTPUT_FOLDER_PATH = "./output/previews";
 const OUTPUT_HEIGHT_PX = 48;
 
@@ -35,7 +36,15 @@ async function computeDiffWithCached(apiResult) {
   return apiResult;
 }
 
+async function updateMetadata() {
+  await fetch(`https://fonts.google.com/metadata/fonts`)
+    .then(raw => raw.json())
+    .then(data => fs.writeFileSync(CACHED_METADATA_PATH, JSON.stringify(data)));
+}
+
 async function run() {
+
+  await updateMetadata();
 
   const apiResult = await fetch(`https://www.googleapis.com/webfonts/v1/webfonts?key=${GFONT_API_KEY}`)
     .then(raw => raw.json())
